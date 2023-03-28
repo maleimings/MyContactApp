@@ -5,6 +5,10 @@ class AddNewContact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController _nameInputController = TextEditingController();
+    final TextEditingController _cellphoneInputController = TextEditingController();
+    final TextEditingController _telephoneInputController = TextEditingController();
+
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -49,6 +53,45 @@ class AddNewContact extends StatelessWidget {
                   onPressed: () {},
                 ),
               )),
+            ),
+          ),
+          Padding(padding: const EdgeInsets.only(top: 80, right:20, left: 20),
+            child: TextField(
+              controller: _nameInputController,
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.all(20.0),
+                icon: Icon(Icons.person),
+                labelText: 'Full Name',
+              ),
+              autofocus: false,
+            ),
+          ),
+          Padding(padding: const EdgeInsets.only(top:20, right:20, left: 20),
+            child: TextField(
+              controller: _cellphoneInputController,
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.all(20.0),
+                icon: Icon(Icons.phone_android),
+                labelText: 'Cellphone Number',
+              ),
+              autofocus: false,
+            ),
+          ),
+          Padding(padding: const EdgeInsets.only(top:20, right:20, left: 20),
+            child: TextField(
+              controller: _telephoneInputController,
+              keyboardType: TextInputType.phone,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.all(20.0),
+                icon: Icon(Icons.phone),
+                labelText: 'Telephone Number',
+              ),
+              autofocus: false,
             ),
           )
         ],
