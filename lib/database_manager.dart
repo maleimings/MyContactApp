@@ -29,7 +29,8 @@ class DatabaseManager {
     return openDatabase(
       join(await getDatabasesPath(), 'my_contact.db'),
       onCreate: (db, version) {
-        return db.execute('CREATE TABLE contact(id INTEGER PRIMARY KEY, name TEXT, cellphone TEXT, telephone TEXT,  favorite INTEGER)');
+        return db.execute(
+            'CREATE TABLE contact(id INTEGER PRIMARY KEY, name TEXT, cellphone TEXT, telephone TEXT,  favorite INTEGER)');
       },
       version: 1,
     );
