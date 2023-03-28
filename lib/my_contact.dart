@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'My Contact'),
     );
   }
 }
@@ -50,6 +50,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  final GlobalKey<ScaffoldState> _drawerScaffoldKey = GlobalKey<ScaffoldState>();
+
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -73,9 +75,49 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        centerTitle: true,
+        title: Text(widget.title,),
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            if (_drawerScaffoldKey.currentState?.isDrawerOpen == true) {
+              Navigator.pop(context);
+            } else {
+              _drawerScaffoldKey.currentState?.openDrawer();
+            }
+          },
+        ),
       ),
-      body: Center(
+      body: Scaffold(
+        key: _drawerScaffoldKey,
+        drawer: Drawer(
+          child: ListView(
+            children: ListTile.divideTiles(
+              context: context,
+              tiles: [
+                ListTile(
+                  title: const Text('Favorites'),
+                  onTap: () {
+
+                  },
+                ),
+                ListTile(
+                  title: const Text('Create Contact'),
+                  onTap: () {
+
+                  },
+                ),
+                ListTile(
+                  title: const Text('Settings'),
+                  onTap: () {
+
+                  },
+                ),
+              ],
+            ).toList(),
+          ),
+        ),
+        body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
@@ -109,7 +151,8 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+      ),// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
