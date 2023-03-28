@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'add_new_contact.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -64,6 +66,13 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  showAddNewContact(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AddNewContact()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -104,7 +113,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ListTile(
                   title: const Text('Create Contact'),
-                  onTap: () {},
+                  onTap: () {
+                    showAddNewContact(context);
+                  },
                 ),
                 ListTile(
                   title: const Text('Settings'),
@@ -145,7 +156,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: _incrementCounter,
+          onPressed: () {
+            showAddNewContact(context);
+          },
           tooltip: 'Create new contact',
           child: const Icon(Icons.add),
         ),
