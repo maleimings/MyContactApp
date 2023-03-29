@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -16,10 +15,10 @@ void main() {
     return ErrorWidget(details.exception);
   };
 
-  runApp(
-    ChangeNotifierProvider(create: (_) => ContactList(),
-    child: const MyApp(),)
-  );
+  runApp(ChangeNotifierProvider(
+    create: (_) => ContactList(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -66,7 +65,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   final GlobalKey<ScaffoldState> _drawerScaffoldKey =
       GlobalKey<ScaffoldState>();
 
@@ -80,7 +78,6 @@ class _MyHomePageState extends State<MyHomePage> {
       MaterialPageRoute(builder: (context) => const AddNewContact()),
     );
   }
-
 
   @override
   void initState() {
@@ -136,36 +133,45 @@ class _MyHomePageState extends State<MyHomePage> {
             ).toList(),
           ),
         ),
-        body: Center(
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          child: Stack(
-            alignment: AlignmentDirectional.topCenter,
-            children: [
-              Center(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        leading: Image.file(File(contactList.myContacts[index].avatar)),
-                        title: Text(contactList.myContacts[index].name),
-                        onTap: () {
-
-                        },);
-                    },
-                    separatorBuilder: (BuildContext context, int index) {
-                    return const Divider(color: Colors.grey,);
-                    },
-                    itemCount: contactList.myContacts.length),
+        body: Stack(
+          alignment: AlignmentDirectional.topCenter,
+          children: [
+            ListView.separated(
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    leading: CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Colors.transparent,
+                        backgroundImage: contactList.myContacts[index].avatar
+                                .startsWith('assets')
+                            ? Image.asset(contactList.myContacts[index].avatar)
+                                .image
+                            : Image.file(
+                                    File(contactList.myContacts[index].avatar))
+                                .image),
+                    trailing: IconButton(
+                      icon: contactList.myContacts[index].favorite
+                          ? const Icon(Icons.star)
+                          : const Icon(Icons.star_border), onPressed: () {  },
+                    ),
+                    title: Text(contactList.myContacts[index].name),
+                    onTap: () {},
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Divider(
+                    color: Colors.grey,
+                  );
+                },
+                itemCount: contactList.myContacts.length),
+            Center(
+              child: Visibility(
+                visible: isLoading,
+                child: const CircularProgressIndicator(),
               ),
-              Center(
-                child: Visibility(
-                  visible: isLoading,
-                  child: const CircularProgressIndicator(),
-                ),
-              )
-            ],
-          )
+            )
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {

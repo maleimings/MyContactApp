@@ -164,7 +164,7 @@ class AddNewContactState extends State<AddNewContact> {
                                   name: _nameInputController.text,
                                   cellphone: _cellphoneInputController.text,
                                   telephone: _telephoneInputController.text,
-                                  avatar: _avatar[0].modifiedPath,
+                                  avatar: _avatar.isNotEmpty ? _avatar[0].modifiedPath : 'assets/images/default.png',
                                   favorite: favorite));
                           if (context.mounted) {
                             if (result > 0) {
