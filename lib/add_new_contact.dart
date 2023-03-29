@@ -23,7 +23,6 @@ class AddNewContactState extends State<AddNewContact> {
 
   @override
   Widget build(BuildContext context) {
-
     final configs = ImagePickerConfigs();
     // AppBar text color
     configs.appBarTextColor = Colors.white;
@@ -49,7 +48,9 @@ class AddNewContactState extends State<AddNewContact> {
           ),
           actions: [
             IconButton(
-              icon: favorite ? const Icon(Icons.star) : const Icon(Icons.star_border),
+              icon: favorite
+                  ? const Icon(Icons.star)
+                  : const Icon(Icons.star_border),
               onPressed: () {
                 setState(() {
                   favorite = !favorite;
@@ -61,33 +62,42 @@ class AddNewContactState extends State<AddNewContact> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(padding: const EdgeInsets.only(top: 60),
-                child: Image.file(File(_avatar.isNotEmpty ? _avatar[0].modifiedPath : 'assets/images/default.png'), height: 80, fit: BoxFit.cover,),),
+              const Padding(
+                padding: EdgeInsets.only(top: 60),
+              ),
               Center(
                 child: Center(
-                    child: GestureDetector(
-                      onTap: () async {
-                        final List<ImageObject> imageObjects = await Navigator.of(context)
-                            .push(PageRouteBuilder(pageBuilder: (context, animation, __) {
-                          return const ImagePicker(maxCount: 1,);
-                        }));
+                  child: GestureDetector(
+                    onTap: () async {
+                      final List<ImageObject> imageObjects =
+                          await Navigator.of(context).push(PageRouteBuilder(
+                              pageBuilder: (context, animation, __) {
+                        return const ImagePicker(
+                          maxCount: 1,
+                        );
+                      }));
 
-                        if (imageObjects.isNotEmpty) {
-                          setState(() {
-                            _avatar = imageObjects;
-                          });
-                        }
-                      },
-                      child: CircleAvatar(
-                        radius: 40,
-                        foregroundColor: Colors.transparent,
+                      if (imageObjects.isNotEmpty) {
+                        setState(() {
+                          _avatar = imageObjects;
+                        });
+                      }
+                    },
+                    child: CircleAvatar(
+                      radius: 40,
+                      foregroundColor: Colors.transparent,
                       backgroundColor: Colors.black,
-                      child: CircleAvatar(backgroundImage: Image.asset('assets/images/default.png').image,
+                      child: CircleAvatar(
+                        backgroundImage: _avatar.isNotEmpty
+                            ? Image.file(File(_avatar[0].modifiedPath)).image
+                            : Image.asset('assets/images/default.png').image,
                         radius: 38,
                         foregroundColor: Colors.transparent,
-                      backgroundColor: Colors.white,),),
+                        backgroundColor: Colors.white,
+                      ),
                     ),
                   ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 80, right: 20, left: 20),
@@ -145,9 +155,7 @@ class AddNewContactState extends State<AddNewContact> {
                             _cellphoneInputController.text.isEmpty ||
                             _telephoneInputController.text.isEmpty) {
                           showSnackbar('Please check the inputs');
-                        } else {
-
-                        }
+                        } else {}
                       },
                     ),
                   ),
