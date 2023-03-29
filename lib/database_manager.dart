@@ -30,7 +30,7 @@ class DatabaseManager {
       join(await getDatabasesPath(), 'my_contact.db'),
       onCreate: (db, version) {
         return db.execute(
-            'CREATE TABLE contacts(id INTEGER PRIMARY KEY, name TEXT, cellphone TEXT, telephone TEXT,  favorite INTEGER)');
+            'CREATE TABLE contacts(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, cellphone TEXT, telephone TEXT, avatar TEXT, favorite INTEGER)');
       },
       version: 1,
     );

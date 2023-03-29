@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:advance_image_picker/advance_image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_contact_app/contact_item.dart';
+import 'package:my_contact_app/contact_repository.dart';
 
 class AddNewContact extends StatefulWidget {
   const AddNewContact({super.key});
@@ -150,12 +152,28 @@ class AddNewContactState extends State<AddNewContact> {
                     height: 50,
                     child: ElevatedButton(
                       child: const Text('Save'),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_nameInputController.text.isEmpty ||
                             _cellphoneInputController.text.isEmpty ||
                             _telephoneInputController.text.isEmpty) {
                           showSnackbar('Please check the inputs');
-                        } else {}
+                        } else {
+                          int result = await ContactRepository().insert(
+                              ContactItem(
+                                  id: 0,
+                                  name: _nameInputController.text,
+                                  cellphone: _cellphoneInputController.text,
+                                  telephone: _telephoneInputController.text,
+                                  avatar: _avatar[0].modifiedPath,
+                                  favorite: favorite));
+                          if (context.mounted) {
+                            if (result > 0) {
+                              Navigator.of(context).pop();
+                            } else {
+                              showSnackbar('Failed to insert contact');
+                            }
+                          }
+                        }
                       },
                     ),
                   ),

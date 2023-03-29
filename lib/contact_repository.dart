@@ -33,16 +33,18 @@ class ContactRepository extends ContactInterface {
   @override
   Future<int> insert(ContactItem item) async {
     Database database = await DatabaseManager.instance.database;
+    Map<String, Object?> data = item.toMap();
+    data.remove('id');
 
     return database.insert(
-        "contacts", item.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+        "contacts", data, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   @override
   Future<int> update(ContactItem item) async {
     Database database = await DatabaseManager.instance.database;
 
-    return database.update("contacts", item.toMap(), where: 'id =?',
+    return database.update("contacts", item.toMap(), where: 'id = ?',
         whereArgs: [item.id],
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
