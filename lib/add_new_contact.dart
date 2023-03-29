@@ -62,31 +62,14 @@ class AddNewContactState extends State<AddNewContact> {
           child: Column(
             children: [
               Padding(padding: const EdgeInsets.only(top: 60),
-                child: Image.file(File(_avatar.isNotEmpty ? _avatar[0].modifiedPath : 'asset/image/default.png'), height: 80, fit: BoxFit.cover,),),
+                child: Image.file(File(_avatar.isNotEmpty ? _avatar[0].modifiedPath : 'assets/images/default.png'), height: 80, fit: BoxFit.cover,),),
               Center(
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                    ),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                      child: SizedBox(
-                    height: 80,
-                    width: 80,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.photo_camera,
-                        size: 50,
-                      ),
-                      onPressed: () async {
+                child: Center(
+                    child: GestureDetector(
+                      onTap: () async {
                         final List<ImageObject> imageObjects = await Navigator.of(context)
                             .push(PageRouteBuilder(pageBuilder: (context, animation, __) {
-                              return const ImagePicker(maxCount: 1,);
+                          return const ImagePicker(maxCount: 1,);
                         }));
 
                         if (imageObjects.isNotEmpty) {
@@ -95,9 +78,16 @@ class AddNewContactState extends State<AddNewContact> {
                           });
                         }
                       },
+                      child: CircleAvatar(
+                        radius: 40,
+                        foregroundColor: Colors.transparent,
+                      backgroundColor: Colors.black,
+                      child: CircleAvatar(backgroundImage: Image.asset('assets/images/default.png').image,
+                        radius: 38,
+                        foregroundColor: Colors.transparent,
+                      backgroundColor: Colors.white,),),
                     ),
-                  )),
-                ),
+                  ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 80, right: 20, left: 20),
