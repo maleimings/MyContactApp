@@ -1,9 +1,19 @@
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:my_contact_app/contact_repository.dart';
+import 'package:my_contact_app/contacts_list.dart';
+import 'package:provider/provider.dart';
 
 import 'add_new_contact.dart';
+import 'contact_item.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(create: (_) => ContactList(),
+    child: const MyApp(),)
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -50,27 +60,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
   final GlobalKey<ScaffoldState> _drawerScaffoldKey =
       GlobalKey<ScaffoldState>();
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  bool isLoading = true;
+
+  late final ContactList contactList;
 
   showAddNewContact(BuildContext context) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AddNewContact()),
     );
+  }
+
+
+  @override
+  void initState() {
+    contactList = Provider.of<ContactList>(context, listen: false);
+
+    super.initState();
+    getMyContacts();
   }
 
   @override
@@ -128,32 +139,33 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Center(
           // Center is a layout widget. It takes a single child and positions it
           // in the middle of the parent.
-          child: Column(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Invoke "debug painting" (press "p" in the console, choose the
-            // "Toggle Debug Paint" action from the Flutter Inspector in Android
-            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-            // to see the wireframe for each widget.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'You have pushed the button this many times:',
+          child: Stack(
+            alignment: AlignmentDirectional.topCenter,
+            children: [
+              Center(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                        leading: Image.file(File(contactList.myContacts[index].avatar)),
+                        title: Text(contactList.myContacts[index].name),
+                        onTap: () {
+
+                        },);
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                    return const Divider(color: Colors.grey,);
+                    },
+                    itemCount: contactList.myContacts.length),
               ),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
+              Center(
+                child: Visibility(
+                  visible: isLoading,
+                  child: const CircularProgressIndicator(),
+                ),
+              )
             ],
-          ),
+          )
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -164,5 +176,13 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  getMyContacts() async {
+    List<ContactItem> contacts = await ContactRepository().getAll();
+    contactList.initMyContacts(contacts);
+    setState(() {
+      isLoading = false;
+    });
   }
 }

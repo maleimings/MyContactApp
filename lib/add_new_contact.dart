@@ -13,6 +13,7 @@ class AddNewContactState extends State<AddNewContact> {
   late final TextEditingController _nameInputController;
   late final TextEditingController _cellphoneInputController;
   late final TextEditingController _telephoneInputController;
+  bool favorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +29,12 @@ class AddNewContactState extends State<AddNewContact> {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.star),
-              onPressed: () {},
+              icon: favorite ? const Icon(Icons.star) : const Icon(Icons.star_border),
+              onPressed: () {
+                setState(() {
+                  favorite = !favorite;
+                });
+              },
             )
           ],
         ),
