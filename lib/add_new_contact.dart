@@ -10,15 +10,12 @@ class AddNewContact extends StatefulWidget {
 }
 
 class AddNewContactState extends State<AddNewContact> {
+  late final TextEditingController _nameInputController;
+  late final TextEditingController _cellphoneInputController;
+  late final TextEditingController _telephoneInputController;
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController nameInputController = TextEditingController();
-    final TextEditingController cellphoneInputController =
-    TextEditingController();
-    final TextEditingController telephoneInputController =
-    TextEditingController();
-
-    // TODO: implement build
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -53,22 +50,22 @@ class AddNewContactState extends State<AddNewContact> {
                   ),
                   child: Center(
                       child: SizedBox(
-                        height: 80,
-                        width: 80,
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.photo_camera,
-                            size: 50,
-                          ),
-                          onPressed: () {},
-                        ),
-                      )),
+                    height: 80,
+                    width: 80,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.photo_camera,
+                        size: 50,
+                      ),
+                      onPressed: () {},
+                    ),
+                  )),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 80, right: 20, left: 20),
                 child: TextField(
-                  controller: nameInputController,
+                  controller: _nameInputController,
                   keyboardType: TextInputType.text,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -82,7 +79,7 @@ class AddNewContactState extends State<AddNewContact> {
               Padding(
                 padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
                 child: TextField(
-                  controller: cellphoneInputController,
+                  controller: _cellphoneInputController,
                   keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -96,7 +93,7 @@ class AddNewContactState extends State<AddNewContact> {
               Padding(
                 padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
                 child: TextField(
-                  controller: telephoneInputController,
+                  controller: _telephoneInputController,
                   keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -116,7 +113,15 @@ class AddNewContactState extends State<AddNewContact> {
                     height: 50,
                     child: ElevatedButton(
                       child: const Text('Save'),
-                      onPressed: () {},
+                      onPressed: () {
+                        if (_nameInputController.text.isEmpty ||
+                            _cellphoneInputController.text.isEmpty ||
+                            _telephoneInputController.text.isEmpty) {
+                          showSnackbar('Please check the inputs');
+                        } else {
+
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -126,4 +131,17 @@ class AddNewContactState extends State<AddNewContact> {
         ));
   }
 
+  @override
+  void initState() {
+    super.initState();
+
+    _nameInputController = TextEditingController();
+    _cellphoneInputController = TextEditingController();
+    _telephoneInputController = TextEditingController();
+  }
+
+  showSnackbar(String message) {
+    SnackBar snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }
