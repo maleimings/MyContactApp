@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 
-class AddNewContact extends StatelessWidget {
+class AddNewContact extends StatefulWidget {
   const AddNewContact({super.key});
 
+  @override
+  State<StatefulWidget> createState() {
+    return AddNewContactState();
+  }
+}
+
+class AddNewContactState extends State<AddNewContact> {
   @override
   Widget build(BuildContext context) {
     final TextEditingController nameInputController = TextEditingController();
     final TextEditingController cellphoneInputController =
-        TextEditingController();
+    TextEditingController();
     final TextEditingController telephoneInputController =
-        TextEditingController();
+    TextEditingController();
 
     // TODO: implement build
     return Scaffold(
@@ -46,16 +53,16 @@ class AddNewContact extends StatelessWidget {
                   ),
                   child: Center(
                       child: SizedBox(
-                    height: 80,
-                    width: 80,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.photo_camera,
-                        size: 50,
-                      ),
-                      onPressed: () {},
-                    ),
-                  )),
+                        height: 80,
+                        width: 80,
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.photo_camera,
+                            size: 50,
+                          ),
+                          onPressed: () {},
+                        ),
+                      )),
                 ),
               ),
               Padding(
@@ -118,4 +125,5 @@ class AddNewContact extends StatelessWidget {
           ),
         ));
   }
+
 }
