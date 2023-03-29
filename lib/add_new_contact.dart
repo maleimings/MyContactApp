@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:advance_image_picker/advance_image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AddNewContact extends StatefulWidget {
   const AddNewContact({super.key});
@@ -15,8 +19,24 @@ class AddNewContactState extends State<AddNewContact> {
   late final TextEditingController _telephoneInputController;
   bool favorite = false;
 
+  List<ImageObject> _avatar = [];
+
   @override
   Widget build(BuildContext context) {
+
+    final configs = ImagePickerConfigs();
+    // AppBar text color
+    configs.appBarTextColor = Colors.white;
+    configs.appBarBackgroundColor = Colors.orange;
+    // Disable select images from album
+    // configs.albumPickerModeEnabled = false;
+    // Only use front camera for capturing
+    // configs.cameraLensDirection = 0;
+    // Translate function
+    configs.translateFunc = (name, value) => Intl.message(value, name: name);
+    // Disable edit function, then add other edit control instead
+    configs.adjustFeatureEnabled = false;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -41,7 +61,8 @@ class AddNewContactState extends State<AddNewContact> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              const Padding(padding: EdgeInsets.only(top: 60)),
+              Padding(padding: const EdgeInsets.only(top: 60),
+                child: Image.file(File(_avatar.isNotEmpty ? _avatar[0].modifiedPath : 'asset/image/default.png'), height: 80, fit: BoxFit.cover,),),
               Center(
                 child: Container(
                   width: 80,
@@ -62,7 +83,18 @@ class AddNewContactState extends State<AddNewContact> {
                         Icons.photo_camera,
                         size: 50,
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        final List<ImageObject> imageObjects = await Navigator.of(context)
+                            .push(PageRouteBuilder(pageBuilder: (context, animation, __) {
+                              return const ImagePicker(maxCount: 1,);
+                        }));
+
+                        if (imageObjects.isNotEmpty) {
+                          setState(() {
+                            _avatar = imageObjects;
+                          });
+                        }
+                      },
                     ),
                   )),
                 ),
