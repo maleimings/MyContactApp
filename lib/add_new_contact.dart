@@ -5,10 +5,10 @@ class AddNewContact extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _nameInputController = TextEditingController();
-    final TextEditingController _cellphoneInputController =
+    final TextEditingController nameInputController = TextEditingController();
+    final TextEditingController cellphoneInputController =
         TextEditingController();
-    final TextEditingController _telephoneInputController =
+    final TextEditingController telephoneInputController =
         TextEditingController();
 
     // TODO: implement build
@@ -61,7 +61,7 @@ class AddNewContact extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 80, right: 20, left: 20),
                 child: TextField(
-                  controller: _nameInputController,
+                  controller: nameInputController,
                   keyboardType: TextInputType.text,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -75,7 +75,7 @@ class AddNewContact extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
                 child: TextField(
-                  controller: _cellphoneInputController,
+                  controller: cellphoneInputController,
                   keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -89,7 +89,7 @@ class AddNewContact extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
                 child: TextField(
-                  controller: _telephoneInputController,
+                  controller: telephoneInputController,
                   keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -99,7 +99,21 @@ class AddNewContact extends StatelessWidget {
                   ),
                   autofocus: false,
                 ),
-              )
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 150, right: 20, left: 20),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      child: const Text('Save'),
+                      onPressed: () {},
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ));
