@@ -9,18 +9,18 @@ import 'package:provider/provider.dart';
 
 import 'contacts_list.dart';
 
-class AddNewContact extends StatefulWidget {
+class CreateOrEditContact extends StatefulWidget {
   ContactItem? contactItem;
 
-  AddNewContact({super.key, this.contactItem});
+  CreateOrEditContact({super.key, this.contactItem});
 
   @override
   State<StatefulWidget> createState() {
-    return AddNewContactState();
+    return CreateOrEditContactState();
   }
 }
 
-class AddNewContactState extends State<AddNewContact> {
+class CreateOrEditContactState extends State<CreateOrEditContact> {
   late final TextEditingController _nameInputController;
   late final TextEditingController _cellphoneInputController;
   late final TextEditingController _telephoneInputController;

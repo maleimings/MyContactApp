@@ -5,7 +5,7 @@ import 'package:my_contact_app/contacts_list.dart';
 import 'package:my_contact_app/my_favorite.dart';
 import 'package:provider/provider.dart';
 
-import 'add_new_contact.dart';
+import 'create_or_edit_contact.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
   showAddNewContact(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddNewContact()),
+      MaterialPageRoute(builder: (context) => CreateOrEditContact()),
     );
   }
 
