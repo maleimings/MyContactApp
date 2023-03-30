@@ -25,6 +25,8 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
 
   late final ContactList _contactList;
 
+  bool takePhoto = false;
+
   @override
   Widget build(BuildContext context) {
     final configs = ImagePickerConfigs();
@@ -90,6 +92,7 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
                 child: Center(
                   child: GestureDetector(
                     onTap: () async {
+                      takePhoto = true;
                       final List<ImageObject> imageObjects =
                           await Navigator.of(context).push(PageRouteBuilder(
                               pageBuilder: (context, animation, __) {
@@ -109,7 +112,7 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
                       foregroundColor: Colors.transparent,
                       backgroundColor: Colors.black,
                       child: CircleAvatar(
-                        backgroundImage: widget.contactItem == null
+                        backgroundImage: widget.contactItem == null || takePhoto
                             ? (_avatar.isNotEmpty
                                 ? Image.file(File(_avatar[0].modifiedPath))
                                     .image
@@ -203,8 +206,7 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
                             result =
                                 await ContactRepository().update(contactItem);
                           }
-                          result =
-                              await ContactRepository().insert(contactItem);
+
                           if (context.mounted) {
                             if (result > 0) {
                               if (widget.contactItem == null) {
