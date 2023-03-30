@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_contact_app/contact_item.dart';
 import 'package:my_contact_app/contact_repository.dart';
+import 'package:provider/provider.dart';
+
+import 'contacts_list.dart';
 
 class AddNewContact extends StatefulWidget {
   const AddNewContact({super.key});
@@ -22,6 +25,10 @@ class AddNewContactState extends State<AddNewContact> {
   bool favorite = false;
 
   List<ImageObject> _avatar = [];
+
+  late final ContactList _contactList;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -158,16 +165,18 @@ class AddNewContactState extends State<AddNewContact> {
                             _telephoneInputController.text.isEmpty) {
                           showSnackbar('Please check the inputs');
                         } else {
+                          ContactItem contactItem = ContactItem(
+                              id: 0,
+                              name: _nameInputController.text,
+                              cellphone: _cellphoneInputController.text,
+                              telephone: _telephoneInputController.text,
+                              avatar: _avatar.isNotEmpty ? _avatar[0].modifiedPath : 'assets/images/default.png',
+                              favorite: favorite);
                           int result = await ContactRepository().insert(
-                              ContactItem(
-                                  id: 0,
-                                  name: _nameInputController.text,
-                                  cellphone: _cellphoneInputController.text,
-                                  telephone: _telephoneInputController.text,
-                                  avatar: _avatar.isNotEmpty ? _avatar[0].modifiedPath : 'assets/images/default.png',
-                                  favorite: favorite));
+                              contactItem);
                           if (context.mounted) {
                             if (result > 0) {
+                              _contactList.insert(result, contactItem);
                               Navigator.of(context).pop();
                             } else {
                               showSnackbar('Failed to insert contact');
@@ -186,6 +195,8 @@ class AddNewContactState extends State<AddNewContact> {
 
   @override
   void initState() {
+    _contactList = Provider.of<ContactList>(context, listen: false);
+
     super.initState();
 
     _nameInputController = TextEditingController();

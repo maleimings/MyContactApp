@@ -70,8 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool isLoading = true;
 
-  late final ContactList contactList;
-
   showAddNewContact(BuildContext context) {
     Navigator.push(
       context,
@@ -81,14 +79,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    contactList = Provider.of<ContactList>(context, listen: false);
-
     super.initState();
-    getMyContacts();
+
+    ContactList contactList = Provider.of<ContactList>(context, listen: false);
+    contactList.getAllContacts();
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+
+    final contactList = Provider.of<ContactList>(context);
+
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -182,13 +187,5 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
-  }
-
-  getMyContacts() async {
-    List<ContactItem> contacts = await ContactRepository().getAll();
-    contactList.initMyContacts(contacts);
-    setState(() {
-      isLoading = false;
-    });
   }
 }

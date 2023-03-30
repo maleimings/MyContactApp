@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_contact_app/contact_item.dart';
 
+import 'contact_repository.dart';
+
 class ContactList with ChangeNotifier {
   final List<ContactItem> myContacts = <ContactItem>[];
 
@@ -13,7 +15,28 @@ class ContactList with ChangeNotifier {
 
     myContacts.addAll(contacts);
 
+    myContacts.sort((a, b) => a.name.compareTo(b.name));
+
     myFavoriteContacts.addAll(myContacts.where((element) => element.favorite).toList());
+
+    notifyListeners();
+  }
+
+  void getAllContacts() async {
+    List<ContactItem> contacts = await ContactRepository().getAll();
+    initMyContacts(contacts);
+  }
+
+  void insert(int index, ContactItem contact) {
+    ContactItem newItem = ContactItem(id: index,
+        name: contact.name,
+        cellphone: contact.cellphone,
+        telephone: contact.telephone,
+        avatar: contact.avatar,
+        favorite: contact.favorite);
+    myContacts.add(newItem);
+
+    myContacts.sort((a, b) => a.name.compareTo(b.name));
 
     notifyListeners();
   }
