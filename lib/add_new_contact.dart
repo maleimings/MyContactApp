@@ -10,7 +10,9 @@ import 'package:provider/provider.dart';
 import 'contacts_list.dart';
 
 class AddNewContact extends StatefulWidget {
-  const AddNewContact({super.key});
+  ContactItem? contactItem;
+
+  AddNewContact({super.key, this.contactItem});
 
   @override
   State<StatefulWidget> createState() {
@@ -27,8 +29,6 @@ class AddNewContactState extends State<AddNewContact> {
   List<ImageObject> _avatar = [];
 
   late final ContactList _contactList;
-
-
 
   @override
   Widget build(BuildContext context) {

@@ -1,12 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:my_contact_app/contact_repository.dart';
 import 'package:my_contact_app/contacts_list.dart';
+import 'package:my_contact_app/my_favorite.dart';
 import 'package:provider/provider.dart';
 
 import 'add_new_contact.dart';
-import 'contact_item.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,7 +72,14 @@ class _MyHomePageState extends State<MyHomePage> {
   showAddNewContact(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const AddNewContact()),
+      MaterialPageRoute(builder: (context) => AddNewContact()),
+    );
+  }
+
+  showMyFavorites(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MyFavorite()),
     );
   }
 
@@ -122,7 +128,9 @@ class _MyHomePageState extends State<MyHomePage> {
               tiles: [
                 ListTile(
                   title: const Text('Favorites'),
-                  onTap: () {},
+                  onTap: () {
+                    showMyFavorites(context);
+                  },
                 ),
                 ListTile(
                   title: const Text('Create Contact'),

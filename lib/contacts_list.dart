@@ -18,6 +18,7 @@ class ContactList with ChangeNotifier {
     myContacts.sort((a, b) => a.name.compareTo(b.name));
 
     myFavoriteContacts.addAll(myContacts.where((element) => element.favorite).toList());
+    myFavoriteContacts.sort((a, b) => a.name.compareTo(b.name));
 
     notifyListeners();
   }
@@ -34,9 +35,14 @@ class ContactList with ChangeNotifier {
         telephone: contact.telephone,
         avatar: contact.avatar,
         favorite: contact.favorite);
-    myContacts.add(newItem);
 
+    myContacts.add(newItem);
     myContacts.sort((a, b) => a.name.compareTo(b.name));
+
+    if (newItem.favorite) {
+      myFavoriteContacts.add(newItem);
+      myFavoriteContacts.sort((a, b) => a.name.compareTo(b.name));
+    }
 
     notifyListeners();
   }
