@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:my_contact_app/contact_item.dart';
 import 'package:my_contact_app/contacts_list.dart';
 import 'package:my_contact_app/my_favorite.dart';
 import 'package:provider/provider.dart';
@@ -83,6 +84,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  showEditContact(BuildContext context, ContactItem item) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CreateOrEditContact(contactItem: item)),
+    );
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -140,7 +149,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ListTile(
                   title: const Text('Settings'),
-                  onTap: () {},
+                  onTap: () {
+
+                  },
                 ),
               ],
             ).toList(),
@@ -169,7 +180,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           : const Icon(Icons.star_border), onPressed: () {  },
                     ),
                     title: Text(contactList.myContacts[index].name),
-                    onTap: () {},
+                    onTap: () {
+                      showEditContact(context, contactList.myContacts[index]);
+                    },
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {

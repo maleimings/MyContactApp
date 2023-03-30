@@ -47,6 +47,27 @@ class ContactList with ChangeNotifier {
     notifyListeners();
   }
 
+  void update(ContactItem newItem) {
+    var index = myContacts.indexWhere((element) => element.id == newItem.id);
+    myContacts[index] = newItem;
+
+    myContacts.sort((a, b) => a.name.compareTo(b.name));
+
+    if (newItem.favorite) {
+      var index = myFavoriteContacts.indexWhere((element) => element.id == newItem.id);
+
+      if (index >= 0) {
+        myFavoriteContacts[index] = newItem;
+      } else {
+        myFavoriteContacts.add(newItem);
+      }
+
+      myFavoriteContacts.sort((a, b) => a.name.compareTo(b.name));
+    }
+
+    notifyListeners();
+  }
+
   void updateMyContacts(ContactItem contact) {
     var index = myContacts.indexWhere((element) => element.id == contact.id);
 

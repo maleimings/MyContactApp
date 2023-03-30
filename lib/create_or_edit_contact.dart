@@ -21,11 +21,6 @@ class CreateOrEditContact extends StatefulWidget {
 }
 
 class CreateOrEditContactState extends State<CreateOrEditContact> {
-  late final TextEditingController _nameInputController;
-  late final TextEditingController _cellphoneInputController;
-  late final TextEditingController _telephoneInputController;
-  bool favorite = false;
-
   List<ImageObject> _avatar = [];
 
   late final ContactList _contactList;
@@ -45,10 +40,27 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
     // Disable edit function, then add other edit control instead
     configs.adjustFeatureEnabled = false;
 
+    var favorite = widget.contactItem?.favorite ?? false;
+
+    TextEditingController nameInputController = TextEditingController(
+        text: widget.contactItem?.name.isNotEmpty == true
+            ? widget.contactItem!.name
+            : '');
+    TextEditingController cellphoneInputController = TextEditingController(
+        text: widget.contactItem?.cellphone.isNotEmpty == true
+            ? widget.contactItem!.cellphone
+            : '');
+    TextEditingController telephoneInputController = TextEditingController(
+        text: widget.contactItem?.telephone.isNotEmpty == true
+            ? widget.contactItem!.telephone
+            : '');
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('Add New Contact'),
+          title: widget.contactItem == null
+              ? const Text('Add New Contact')
+              : Text(widget.contactItem?.name ?? 'Update'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
@@ -97,9 +109,16 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
                       foregroundColor: Colors.transparent,
                       backgroundColor: Colors.black,
                       child: CircleAvatar(
-                        backgroundImage: _avatar.isNotEmpty
-                            ? Image.file(File(_avatar[0].modifiedPath)).image
-                            : Image.asset('assets/images/default.png').image,
+                        backgroundImage: widget.contactItem == null
+                            ? (_avatar.isNotEmpty
+                                ? Image.file(File(_avatar[0].modifiedPath))
+                                    .image
+                                : Image.asset('assets/images/default.png')
+                                    .image)
+                            : (widget.contactItem!.avatar.startsWith('assets')
+                                ? Image.asset(widget.contactItem!.avatar).image
+                                : Image.file(File(widget.contactItem!.avatar))
+                                    .image),
                         radius: 38,
                         foregroundColor: Colors.transparent,
                         backgroundColor: Colors.white,
@@ -111,7 +130,7 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
               Padding(
                 padding: const EdgeInsets.only(top: 80, right: 20, left: 20),
                 child: TextField(
-                  controller: _nameInputController,
+                  controller: nameInputController,
                   keyboardType: TextInputType.text,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -125,7 +144,7 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
               Padding(
                 padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
                 child: TextField(
-                  controller: _cellphoneInputController,
+                  controller: cellphoneInputController,
                   keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -139,7 +158,7 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
               Padding(
                 padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
                 child: TextField(
-                  controller: _telephoneInputController,
+                  controller: telephoneInputController,
                   keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -158,25 +177,41 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      child: const Text('Save'),
+                      child: widget.contactItem == null
+                          ? const Text('Save')
+                          : const Text('Update'),
                       onPressed: () async {
-                        if (_nameInputController.text.isEmpty ||
-                            _cellphoneInputController.text.isEmpty ||
-                            _telephoneInputController.text.isEmpty) {
+                        if (nameInputController.text.isEmpty ||
+                            cellphoneInputController.text.isEmpty ||
+                            telephoneInputController.text.isEmpty) {
                           showSnackbar('Please check the inputs');
                         } else {
                           ContactItem contactItem = ContactItem(
                               id: 0,
-                              name: _nameInputController.text,
-                              cellphone: _cellphoneInputController.text,
-                              telephone: _telephoneInputController.text,
-                              avatar: _avatar.isNotEmpty ? _avatar[0].modifiedPath : 'assets/images/default.png',
+                              name: nameInputController.text,
+                              cellphone: cellphoneInputController.text,
+                              telephone: telephoneInputController.text,
+                              avatar: _avatar.isNotEmpty
+                                  ? _avatar[0].modifiedPath
+                                  : 'assets/images/default.png',
                               favorite: favorite);
-                          int result = await ContactRepository().insert(
-                              contactItem);
+                          int result = -1;
+                          if (widget.contactItem == null) {
+                            result =
+                                await ContactRepository().insert(contactItem);
+                          } else {
+                            result =
+                                await ContactRepository().update(contactItem);
+                          }
+                          result =
+                              await ContactRepository().insert(contactItem);
                           if (context.mounted) {
                             if (result > 0) {
-                              _contactList.insert(result, contactItem);
+                              if (widget.contactItem == null) {
+                                _contactList.insert(result, contactItem);
+                              } else {
+                                _contactList.update(contactItem);
+                              }
                               Navigator.of(context).pop();
                             } else {
                               showSnackbar('Failed to insert contact');
@@ -198,10 +233,6 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
     _contactList = Provider.of<ContactList>(context, listen: false);
 
     super.initState();
-
-    _nameInputController = TextEditingController();
-    _cellphoneInputController = TextEditingController();
-    _telephoneInputController = TextEditingController();
   }
 
   showSnackbar(String message) {
