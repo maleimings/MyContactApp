@@ -27,6 +27,8 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
 
   bool takePhoto = false;
 
+  final String defaultAvatarAsset = 'assets/images/default.png';
+
   @override
   Widget build(BuildContext context) {
     final configs = ImagePickerConfigs();
@@ -116,7 +118,7 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
                             ? (_avatar.isNotEmpty
                                 ? Image.file(File(_avatar[0].modifiedPath))
                                     .image
-                                : Image.asset('assets/images/default.png')
+                                : Image.asset(defaultAvatarAsset)
                                     .image)
                             : (widget.contactItem!.avatar.startsWith('assets')
                                 ? Image.asset(widget.contactItem!.avatar).image
@@ -196,7 +198,7 @@ class CreateOrEditContactState extends State<CreateOrEditContact> {
                               telephone: telephoneInputController.text,
                               avatar: _avatar.isNotEmpty
                                   ? _avatar[0].modifiedPath
-                                  : 'assets/images/default.png',
+                                  : defaultAvatarAsset,
                               favorite: favorite);
                           int result = -1;
                           if (widget.contactItem == null) {
